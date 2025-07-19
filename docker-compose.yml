@@ -1,0 +1,61 @@
+services:
+
+  cachet-app:
+    image: ghcr.io/steffjenl/docker-cachet:latest
+    container_name: cachet-app
+    tty: true
+    environment:
+      SERVICE_NAME: cachet-app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html
+    ports:
+      - "8080:80"
+    volumes:
+      - ./.env:/var/www/html/.env
+    networks:
+      - cachet-network
+    restart: unless-stopped
+
+  cachet-queue-worker:
+    image: ghcr.io/steffjenl/docker-cachet:latest
+    container_name: cachet-queue-worker
+    tty: true
+    environment:
+      SERVICE_NAME: cachet-queue-worker
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html
+    volumes:
+      - ./.env:/var/www/html/.env
+    networks:
+      - cachet-network
+    command: php artisan queue:work --queue=default --sleep=3 --tries=3 --max-time=3600
+    restart: unless-stopped
+
+  cachet-scheduler-worker:
+    image: ghcr.io/steffjenl/docker-cachet:latest
+    container_name: cachet-scheduler-worker
+    tty: true
+    environment:
+      SERVICE_NAME: cachet-scheduler-worker
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html
+    volumes:
+      - ./.env:/var/www/html/.env
+    networks:
+      - cachet-network
+    command: php artisan schedule:work
+    restart: unless-stopped
+
+  mariadb:
+    container_name: cachet-mariadb
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - cachet-network
+
+networks:
+  cachet-network:
+    name: cachet-network
+    driver: bridge
