@@ -17,7 +17,7 @@ USER www-data
 
 # Install Composer dependencies and NPM packages
 RUN composer install --no-dev -o
-RUN composer update cachethq/core
+# RUN composer update cachethq/core
 
 # Publish the Cachet assets
 RUN php artisan vendor:publish --tag=cachet
