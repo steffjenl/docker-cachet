@@ -23,3 +23,6 @@ RUN composer update cachethq/core
 
 # Publish the Cachet assets
 RUN php artisan vendor:publish --tag=cachet
+
+# Publush the FilamentPHP Assets
+RUN php artisan filament:assets
