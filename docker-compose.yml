@@ -12,6 +12,7 @@ services:
       - "8080:80"
     volumes:
       - ./.env:/var/www/html/.env
+      - ./storage/app/:/var/www/html/storage/app/
     networks:
       - cachet-network
     restart: unless-stopped
@@ -26,6 +27,7 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./.env:/var/www/html/.env
+      - ./storage/app/:/var/www/html/storage/app/
     networks:
       - cachet-network
     command: php artisan queue:work --queue=default --sleep=3 --tries=3 --max-time=3600
@@ -41,6 +43,7 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./.env:/var/www/html/.env
+      - ./storage/app/:/var/www/html/storage/app/
     networks:
       - cachet-network
     command: php artisan schedule:work
