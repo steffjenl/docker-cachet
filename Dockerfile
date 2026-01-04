@@ -26,3 +26,6 @@ RUN php artisan vendor:publish --tag=cachet
 
 # Publush the FilamentPHP Assets
 RUN php artisan filament:assets
+
+# Link public storage directory
+RUN php artisan storage:link
