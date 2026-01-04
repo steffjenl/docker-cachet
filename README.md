@@ -58,7 +58,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 ### 3. Start the Services
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This will start all services in the background:
@@ -69,10 +69,10 @@ This will start all services in the background:
 
 ### 4. Generate Application Key
 
-After the containers are running, generate the Laravel application key:
+After the containers are running, generate the Laravel application key and paste into your .env file:
 
 ```bash
-docker exec cachet-app php artisan key:generate
+docker compose exec cachet-app php artisan key:generate --show
 ```
 
 ### 5. Run Database Migrations
@@ -80,7 +80,7 @@ docker exec cachet-app php artisan key:generate
 Set up the database tables:
 
 ```bash
-docker exec cachet-app php artisan migrate --force
+docker compose exec cachet-app php artisan migrate --force
 ```
 
 ### 6. Create the first user
@@ -88,7 +88,7 @@ docker exec cachet-app php artisan migrate --force
 Create the first user by following the prompts:
 
 ```bash
-docker exec cachet-app php artisan cachet:make:user
+docker compose exec -it cachet-app php artisan cachet:make:user
 ```
 
 ### 7. Access Your Status Page
@@ -165,32 +165,32 @@ server {
 To update to the latest version:
 
 ```bash
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ### Backup
 
 #### Database Backup
 ```bash
-docker exec cachet-mariadb mysqldump -u root -p cachet > backup_$(date +%Y%m%d_%H%M%S).sql
+docker compose exec cachet-mariadb mysqldump -u root -p cachet > backup_$(date +%Y%m%d_%H%M%S).sql
 ```
 
 #### Restore Database
 ```bash
-docker exec -i cachet-mariadb mysql -u root -p cachet < backup_file.sql
+docker compose exec -i cachet-mariadb mysql -u root -p cachet < backup_file.sql
 ```
 
 ### Logs
 
 View application logs:
 ```bash
-docker-compose logs -f cachet-app
+docker compose logs -f cachet-app
 ```
 
 View all service logs:
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ## Troubleshooting
@@ -206,8 +206,8 @@ docker-compose logs -f
 To start fresh:
 
 ```bash
-docker-compose down -v
-docker-compose up -d
+docker compose down -v
+docker compose up -d
 ```
 
 **Warning**: This will delete all data including your database.
